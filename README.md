@@ -1,108 +1,134 @@
+# 🐳 Commandes Docker Essentielles et Avancées
 
-# 📦 Création d'Images Docker
+## 📦 Gestion des images
 
-## 🚀 Méthodes de Création
+- `docker pull <image>`  
+  Télécharger une image depuis Docker Hub.
 
-- **Interactivement**  
-  Créer un conteneur, y faire les modifications nécessaires, puis sauvegarder sous forme d'image avec `docker commit`.
+- `docker build -t <nom_image> .`  
+  Construire une image à partir d’un `Dockerfile` dans le répertoire courant.
 
-- **Avec un Dockerfile**  
-  Décrire les étapes de création dans un fichier texte, puis construire avec `docker build`.
+- `docker images`  
+  Lister les images locales.
 
----
+- `docker rmi <image>`  
+  Supprimer une image locale.
 
-## 📝 Exemple avec Dockerfile
-
-```Dockerfile
-FROM ubuntu
-RUN apt-get update
-RUN apt-get -y install cowsay
-```
-
-- `FROM` : Image de base  
-- `RUN` : Commande exécutée lors de la construction  
-
-**Construire l'image**  
-```bash
-docker build -t cowsay .
-```
+- `docker image prune`  
+  Supprimer les images inutilisées pour libérer de l’espace.
 
 ---
 
-## ⚙️ CMD & ENTRYPOINT
+## 🛳️ Gestion des conteneurs
 
-- **CMD** : Définit la commande par défaut si aucun argument n'est passé.
-- **ENTRYPOINT** : Commande toujours exécutée.  
-- Si combinés, `ENTRYPOINT` + `CMD` => la commande est composée.
+- `docker run <options> <image>`  
+  Lancer un conteneur à partir d’une image.
 
-**Exemple :**
-```Dockerfile
-ENTRYPOINT ["/usr/games/cowsay", "-e", "%%"]
-CMD ["hello world"]
-```
+  Exemples :
+  - `-d` : Mode détaché (background).
+  - `-p 8080:80` : Redirige le port 80 du conteneur vers le port 8080 local.
+  - `--name <nom>` : Nom personnalisé du conteneur.
+  - `-v volume:/chemin` : Attache un volume.
 
----
+- `docker ps`  
+  Lister les conteneurs en cours d'exécution.
 
-## 🗂️ Gestion des Couches
+- `docker ps -a`  
+  Lister tous les conteneurs, même arrêtés.
 
-- Chaque commande du Dockerfile = nouvelle couche.
-- Les couches sont partagées entre les conteneurs.
-- Optimisation par **copy-on-write**.
+- `docker stop <container>`  
+  Arrêter un conteneur.
 
-**Voir l’historique d’une image**
-```bash
-docker history mycowsay
-```
+- `docker start <container>`  
+  Démarrer un conteneur arrêté.
 
----
+- `docker restart <container>`  
+  Redémarrer un conteneur.
 
-## 🛠️ Bonnes pratiques
+- `docker rm <container>`  
+  Supprimer un conteneur arrêté.
 
-- Mettre les commandes stables en début de Dockerfile (optimisation du cache).
-- Utiliser le **build multi-stage** pour des images légères.
-
-**Exemple multi-stage**
-```Dockerfile
-FROM ubuntu AS builder
-RUN apt-get update && apt-get install -y build-essential
-COPY hello.c /
-RUN make hello
-
-FROM ubuntu
-COPY --from=builder /hello /hello
-CMD ["/hello"]
-```
+- `docker container prune`  
+  Supprimer tous les conteneurs arrêtés.
 
 ---
 
-## 🗃️ Publication des images
+## 🛠️ Commandes pratiques sur les conteneurs
 
-- **Taguer l’image**
-```bash
-docker tag mycowsay mydockeraccount/cowsay:latest
-```
+- `docker exec -it <container> <commande>`  
+  Exécuter une commande dans un conteneur (ex : bash, sh).
 
-- **Se connecter**
-```bash
-docker login
-```
+- `docker attach <container>`  
+  Se connecter au terminal d’un conteneur déjà en cours.
 
-- **Publier**
-```bash
-docker push mydockeraccount/cowsay
-```
+- `docker logs <container>`  
+  Afficher les logs d’un conteneur.
 
----
+- `docker inspect <container>`  
+  Afficher toutes les informations détaillées d’un conteneur.
 
-## 📜 Résumé
+- `docker cp <container>:<chemin_dans_conteneur> <chemin_local>`  
+  Copier un fichier du conteneur vers la machine hôte.
 
-- Dockerfile = Infrastructure as Code  
-- Multi-stage builds pour des images propres  
-- Gestion fine des couches et du cache  
-- Publication simplifiée via Docker Hub  
+- `docker top <container>`  
+  Voir les processus en cours dans un conteneur.
 
 ---
 
-**Sources :**  
-[Documentation Docker](https://docs.docker.com/engine/reference/builder/)  
-[Best practices Dockerfile](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
+## 📂 Volumes et réseaux
+
+### Volumes
+
+- `docker volume create <nom>`  
+  Créer un volume Docker.
+
+- `docker volume ls`  
+  Lister les volumes.
+
+- `docker volume inspect <nom>`  
+  Voir les détails d’un volume.
+
+- `docker volume rm <nom>`  
+  Supprimer un volume.
+
+- `docker volume prune`  
+  Supprimer les volumes inutilisés.
+
+### Réseaux
+
+- `docker network ls`  
+  Lister les réseaux existants.
+
+- `docker network create <nom>`  
+  Créer un nouveau réseau.
+
+- `docker network inspect <nom>`  
+  Détails sur le réseau.
+
+- `docker network connect <réseau> <container>`  
+  Connecter un conteneur à un réseau.
+
+- `docker network disconnect <réseau> <container>`  
+  Déconnecter un conteneur d’un réseau.
+
+---
+
+## 🧱 Dockerfile – Création d’images personnalisées
+
+Exemple de Dockerfile :
+
+```dockerfile
+# Utilise une image de base officielle
+FROM python:3.10-slim
+
+# Définit le répertoire de travail
+WORKDIR /app
+
+# Copie les fichiers du projet dans le conteneur
+COPY . .
+
+# Installe les dépendances
+RUN pip install -r requirements.txt
+
+# Définit la commande de démarrage
+CMD ["python", "main.py"]
