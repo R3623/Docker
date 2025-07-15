@@ -1,8 +1,10 @@
-# 🐳 Commandes Docker Essentielles et Avancées
+#  Commandes Docker Essentielles et Avancées
 
-## 📦 Gestion des images
+##  Gestion des images
 
-- `docker pull <image>`  
+- ```bash
+- docker pull <image>
+```  
   Télécharger une image depuis Docker Hub.
 
 - `docker build -t <nom_image> .`  
