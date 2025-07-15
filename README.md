@@ -1,15 +1,15 @@
-##  Gestion des images
-# Télécharger une image depuis Docker Hub.
+# Gestion des images
+## Télécharger une image depuis Docker Hub.
 ```bash
 docker pull <image>  
 ```
 
-# Construire une image à partir d’un Dockerfile.
+## Construire une image à partir d’un Dockerfile.
 ```bash
  docker build -t <nom_image> . 
 ```
 
-# Lister les images locales.
+## Lister les images locales.
 ```bash
 docker images
 ```
