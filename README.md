@@ -32,6 +32,16 @@ docker image prune
 docker image prune -a
 ```
 
+### Sauvegarder une image en fichier tar
+```
+docker save -o <nom_fichier>.tar <nom_image>
+```
+
+### Charger une image à partir d’un fichier tar
+```
+docker load -i <nom_fichier>.tar
+```
+
 ---
 
 ## Gestion des conteneurs
@@ -44,6 +54,16 @@ docker run <image>
 ### Créer, nommer, détacher un conteneur avec un port exposé
 ```
 docker run -d -p <port_local>:<port_conteneur> --name <nom_conteneur> <image>
+```
+
+### Créer un conteneur avec un volume monté
+```
+docker run -v <chemin_hote>:<chemin_conteneur> <image>
+```
+
+### Créer un conteneur en mode interactif avec terminal
+```
+docker run -it <image>
 ```
 
 ### Lister les conteneurs en cours d’exécution
@@ -81,6 +101,11 @@ docker rm <id_conteneur>
 docker container prune
 ```
 
+### Renommer un conteneur
+```
+docker rename <ancien_nom> <nouveau_nom>
+```
+
 ---
 
 ## Réseaux Docker
@@ -95,9 +120,19 @@ docker network ls
 docker network create <nom_reseau>
 ```
 
+### Inspecter un réseau
+```
+docker network inspect <nom_reseau>
+```
+
 ### Connecter un conteneur à un réseau
 ```
 docker network connect <nom_reseau> <nom_conteneur>
+```
+
+### Déconnecter un conteneur d’un réseau
+```
+docker network disconnect <nom_reseau> <nom_conteneur>
 ```
 
 ---
@@ -112,6 +147,11 @@ docker volume ls
 ### Créer un volume
 ```
 docker volume create <nom_volume>
+```
+
+### Inspecter un volume
+```
+docker volume inspect <nom_volume>
 ```
 
 ### Supprimer un volume
@@ -147,6 +187,11 @@ docker version
 docker logs <id_conteneur>
 ```
 
+### Afficher les logs en temps réel
+```
+docker logs -f <id_conteneur>
+```
+
 ### Exécuter une commande dans un conteneur en cours
 ```
 docker exec -it <id_conteneur> <commande>
@@ -155,6 +200,16 @@ docker exec -it <id_conteneur> <commande>
 ### Accéder au shell d’un conteneur
 ```
 docker exec -it <id_conteneur> bash
+```
+
+### Copier un fichier du conteneur vers l’hôte
+```
+docker cp <id_conteneur>:<chemin_fichier> <chemin_destination>
+```
+
+### Copier un fichier de l’hôte vers le conteneur
+```
+docker cp <chemin_fichier> <id_conteneur>:<chemin_destination>
 ```
 
 ---
@@ -192,4 +247,23 @@ dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux 
 
 ---
 
-*Fichier généré le 15 juillet 2025 — Commandes utilisées dans la journée*
+## Gestion des images via Docker Hub (login & push)
+
+### Se connecter à Docker Hub
+```
+docker login
+```
+
+### Pousser une image sur Docker Hub
+```
+docker push <nom_image>
+```
+
+### Récupérer l’ID d’une image
+```
+docker inspect --format='{{.Id}}' <nom_image>
+```
+
+---
+
+*Fichier généré le 15 juillet 2025 — Liste complète des commandes utilisées aujourd'hui*
