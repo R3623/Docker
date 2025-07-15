@@ -1,164 +1,195 @@
-# Gestion des images
-## Télécharger une image depuis Docker Hub.
-```bash
-docker pull <image>  
+# Commandes Docker - Essentielles et Avancées
+
+## Gestion des images
+
+### Télécharger une image depuis Docker Hub
+```
+docker pull <image>
 ```
 
-## Construire une image à partir d’un Dockerfile.
-```bash
- docker build -t <nom_image> . 
+### Construire une image à partir d’un Dockerfile
+```
+docker build -t <nom_image> .
 ```
 
-## Lister les images locales.
-```bash
+### Lister les images locales
+```
 docker images
 ```
 
-## Supprimer une image locale.
-```bash
- docker rmi <image>  
+### Supprimer une image locale
+```
+docker rmi <image>
 ```
 
-## Supprimer les images inutilisées.
-```bash
-docker image prune  
+### Supprimer les images inutilisées
+```
+docker image prune
 ```
 
-
-##  Gestion des conteneurs
-# Lancer un conteneur depuis une image./Exemples d'options : -d, -p, --name, -v
-```bash
-docker run <options> <image>
+### Supprimer toutes les images non utilisées (dangling et non dangling)
+```
+docker image prune -a
 ```
 
-## Lister les conteneurs en cours.
-```bash
-docker ps  
+---
+
+## Gestion des conteneurs
+
+### Créer et lancer un conteneur
+```
+docker run <image>
 ```
 
-## Lister tous les conteneurs.
-```bash
-docker ps -a  
+### Créer, nommer, détacher un conteneur avec un port exposé
+```
+docker run -d -p <port_local>:<port_conteneur> --name <nom_conteneur> <image>
 ```
 
-## Arrêter un conteneur.
-```bash
-docker stop <container>  
+### Lister les conteneurs en cours d’exécution
+```
+docker ps
 ```
 
-## Démarrer un conteneur.
-```bash
-docker start <container>  
+### Lister tous les conteneurs (en cours ou stoppés)
+```
+docker ps -a
 ```
 
-## Redémarrer un conteneur.
-```bash
-docker restart <container>  
+### Arrêter un conteneur
+```
+docker stop <id_conteneur>
 ```
 
-## Supprimer un conteneur arrêté.
-```bash
-docker rm <container>  
+### Démarrer un conteneur arrêté
+```
+docker start <id_conteneur>
 ```
 
-## Supprimer tous les conteneurs arrêtés.
-```bash
-docker container prune  
+### Redémarrer un conteneur
+```
+docker restart <id_conteneur>
 ```
 
-
-#  Commandes pratiques sur les conteneurs
-## Exécuter une commande dans un conteneur.
-```bash
-docker exec -it <container> <commande>
+### Supprimer un conteneur
+```
+docker rm <id_conteneur>
 ```
 
-## Accéder au terminal du conteneur.
-```bash
-docker attach <container>
+### Supprimer tous les conteneurs stoppés
 ```
-## Voir les logs du conteneur.
-```bash
-docker logs <container>  
-```
-## Voir les informations détaillées.
-```bash
-docker inspect <container>  
-```
-## Copier un fichier du conteneur vers l'hôte.
-```bash
-docker cp <container>:<chemin_dans_conteneur> <chemin_local>
-```  
-
-## Voir les processus en cours.
-```bash
-docker top <container>  
+docker container prune
 ```
 
-#  Volumes et Réseaux
+---
 
-#-  Volumes
+## Réseaux Docker
 
-## Créer un volume.
-```bash
-docker volume create <nom>
+### Lister les réseaux Docker
+```
+docker network ls
 ```
 
-## Lister les volumes.
-```bash
+### Créer un réseau
+```
+docker network create <nom_reseau>
+```
+
+### Connecter un conteneur à un réseau
+```
+docker network connect <nom_reseau> <nom_conteneur>
+```
+
+---
+
+## Volumes Docker
+
+### Lister les volumes
+```
 docker volume ls
 ```
 
-## Voir les informations détaillées.
-```bash
-docker volume inspect <nom>
+### Créer un volume
+```
+docker volume create <nom_volume>
 ```
 
-## Supprimer un volume.
-```bash
-docker volume rm <nom>  
+### Supprimer un volume
+```
+docker volume rm <nom_volume>
 ```
 
-## Supprimer les volumes inutilisés.
-```bash
-docker volume prune  
+### Nettoyer les volumes inutilisés
+```
+docker volume prune
 ```
 
-#-  Réseaux
-## Lister les réseaux.
-```bash
-docker network ls  
+---
+
+## Information Système
+
+### Afficher les informations système Docker
+```
+docker info
 ```
 
-## Créer un réseau.
-```bash
-docker network create <nom>
+### Afficher la version Docker
+```
+docker version
 ```
 
-## Voir les informations d'un réseau.
-```bash
-docker network inspect <nom>  
+---
+
+## Autres commandes utiles
+
+### Afficher les logs d’un conteneur
+```
+docker logs <id_conteneur>
 ```
 
-## Connecter un conteneur à un réseau.
-```bash
-docker network connect <réseau> <container>
+### Exécuter une commande dans un conteneur en cours
+```
+docker exec -it <id_conteneur> <commande>
 ```
 
-## Déconnecter un conteneur d’un réseau.
-```bash
-docker network disconnect <réseau> <container>  
+### Accéder au shell d’un conteneur
+```
+docker exec -it <id_conteneur> bash
 ```
 
-#  Exemple Dockerfile – Création d’une image personnalisée
-```dockerfile
-FROM python:3.10-slim
+---
 
-WORKDIR /app
+## Nettoyage général
 
-COPY . .
-
-RUN pip install -r requirements.txt
-
-CMD ["python", "main.py"]
+### Supprimer toutes les ressources inutilisées (volumes, réseaux, images, conteneurs)
 ```
+docker system prune
+```
+
+### Supprimer absolument tout (avec confirmation)
+```
+docker system prune -a --volumes
+```
+
+---
+
+## Commandes système (à vérifier avant installation)
+
+### Activer Hyper-V sur Windows
+```
+dism.exe /online /enable-feature /featurename:Microsoft-Hyper-V-All /all /norestart
+```
+
+### Activer Virtual Machine Platform
+```
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+```
+
+### Activer WSL
+```
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+```
+
+---
+
+*Fichier généré le 15 juillet 2025 — Commandes utilisées dans la journée*
