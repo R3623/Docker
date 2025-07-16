@@ -271,4 +271,4 @@ docker inspect --format='{{.Id}}' <nom_image>
 
 ---
 
-*Fichier généré le 15 juillet 2025 — Liste complète des commandes utilisées aujourd'hui*
+
